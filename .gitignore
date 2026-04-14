@@ -1,0 +1,10 @@
+# Java build artifacts
+*.class
+
+# Runtime output
+trip_report.txt
+
+# IDE files
+.idea/
+.vscode/
+*.iml

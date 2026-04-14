@@ -8,24 +8,26 @@ public class TripSchedule {
     int numTrips, tripNum = 0;
 
     public TripSchedule(String fileName) throws FileNotFoundException, ParseException {
-        Scanner tripCount = new Scanner(new File(fileName));
-        while (tripCount.hasNextLine()) {
-            tripCount.nextLine();
-            numTrips++;
-        }
-        this.trips = new Trip[numTrips];
-        Scanner input = new Scanner(new File(fileName));
-        while (input.hasNextLine()) {
-            Trip trips = new Trip(input.next(), input.next(), input.nextInt());
-            addTrip(trips);
-
-            try{
-                input.nextLine();
-            } catch (Exception e){
-                break;
+        try (Scanner tripCount = new Scanner(new File(fileName))) {
+            while (tripCount.hasNextLine()) {
+                tripCount.nextLine();
+                numTrips++;
             }
         }
-        input.close();
+
+        this.trips = new Trip[numTrips];
+        try (Scanner input = new Scanner(new File(fileName))) {
+            while (input.hasNextLine()) {
+                Trip trips = new Trip(input.next(), input.next(), input.nextInt());
+                addTrip(trips);
+
+                try {
+                    input.nextLine();
+                } catch (Exception e) {
+                    break;
+                }
+            }
+        }
     }
 
     public void addTrip(Trip trip) {
@@ -33,15 +35,15 @@ public class TripSchedule {
         this.tripNum++;
     }
 
-    public void printDepartureSchedule() {
+    public void printDepartureSchedule(String outputPath) {
         for (int i = 0; i < numTrips; i++) {
-            Io.writeToFile(Main.output, trips[i].departureToString(), true, true );
+            Io.writeToFile(outputPath, trips[i].departureToString(), true, true);
         }
     }
 
-    public void printArrivalSchedule() {
+    public void printArrivalSchedule(String outputPath) {
         for (int i = 0; i < numTrips; i++) {
-            Io.writeToFile(Main.output, trips[i].arrivalToString(), true, true );
+            Io.writeToFile(outputPath, trips[i].arrivalToString(), true, true);
         }
     }
 }
